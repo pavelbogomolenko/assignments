@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ThreeSumBruteForceTestCase" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-08-10T08:35:30" hostname="pbgmlnko" time="0.008">
+  <properties/>
+  <testcase name="threeSumBruteForceCount(int, int, String)[1]" classname="ThreeSumBruteForceTestCase" time="0.001"/>
+  <testcase name="threeSumBruteForceCount(int, int, String)[2]" classname="ThreeSumBruteForceTestCase" time="0.001"/>
+  <testcase name="threeSumBruteForceCount(int, int, String)[3]" classname="ThreeSumBruteForceTestCase" time="0.001"/>
+  <testcase name="threeSumBruteForceCount(int, int, String)[4]" classname="ThreeSumBruteForceTestCase" time="0.0"/>
+  <testcase name="threeSumBruteForceCount(int, int, String)[5]" classname="ThreeSumBruteForceTestCase" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

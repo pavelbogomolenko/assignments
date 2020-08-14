@@ -2,10 +2,10 @@ import main.java.Deque;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DequeTestCase {
@@ -79,5 +79,59 @@ public class DequeTestCase {
             actualResult[i++] = s;
         }
         assertArrayEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void shouldDepleteDequeFromFront() {
+        Deque<Integer> deque = new Deque<>();
+
+        deque.addFirst(20);
+        deque.addFirst(10);
+        deque.addLast(30);
+        deque.addLast(40);
+
+        deque.removeFirst();
+        deque.removeFirst();
+        deque.removeFirst();
+        deque.removeFirst();
+
+        assertEquals(0, deque.size());
+    }
+
+    @Test
+    void shouldDepleteDequeFromBack() {
+        Deque<Integer> deque = new Deque<>();
+
+        deque.addFirst(20);
+        deque.addFirst(10);
+        deque.addLast(30);
+        deque.addLast(40);
+
+        deque.removeLast();
+        deque.removeLast();
+        deque.removeLast();
+        deque.removeLast();
+
+        assertEquals(0, deque.size());
+    }
+
+    @Test
+    void iteratorShouldThrowAnExceptionWhenNoMoreItems() {
+        Deque<String> queue = new Deque<>();
+
+        assertThrows(NoSuchElementException.class, ()-> {
+            Iterator<String> queueIterator = queue.iterator();
+            queueIterator.next();
+        });
+    }
+
+    @Test
+    void iteratorShouldThrowAnExceptionWhenTruingToRemoveAnItem() {
+        Deque<String> queue = new Deque<>();
+
+        assertThrows(UnsupportedOperationException.class, ()-> {
+            Iterator<String> queueIterator = queue.iterator();
+            queueIterator.remove();
+        });
     }
 }

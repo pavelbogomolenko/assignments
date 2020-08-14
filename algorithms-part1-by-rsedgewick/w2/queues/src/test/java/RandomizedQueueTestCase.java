@@ -12,7 +12,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void testRandomizedQueue() {
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(10);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(5);
         randomizedQueue.enqueue(10);
@@ -28,7 +28,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void testRandomizedQueueIterator() {
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(4);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -43,7 +43,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void testRandomizedQueueIteratorAfterDequeue() {
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(5);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -69,7 +69,7 @@ public class RandomizedQueueTestCase {
     @Test
     void testDoubleCapacityOfRandomizedQueueWhenFull() {
         int initialCapacity = 2;
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(initialCapacity);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -83,7 +83,7 @@ public class RandomizedQueueTestCase {
     @Test
     void testShrinkCapacityOfRandomizedQueue() {
         int initialCapacity = 4;
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(initialCapacity);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -99,7 +99,7 @@ public class RandomizedQueueTestCase {
     @Test
     void testShrinkCapacityIteratorOfRandomizedQueue() {
         int initialCapacity = 5;
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(initialCapacity);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -124,8 +124,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void testDepleteAndAddItemRandomizedQueue() {
-        int initialCapacity = 5;
-        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue(initialCapacity);
+        RandomizedQueue<Integer> randomizedQueue = new RandomizedQueue();
 
         randomizedQueue.enqueue(10);
         randomizedQueue.enqueue(20);
@@ -152,7 +151,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void shouldReturnRandomItem() {
-        RandomizedQueue<String> queue = new RandomizedQueue<>(3);
+        RandomizedQueue<String> queue = new RandomizedQueue<>();
         queue.enqueue("a");
         queue.enqueue("b");
         queue.enqueue("c");
@@ -165,7 +164,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void shouldIterateInUniformlyRandomOrder() {
-        RandomizedQueue<String> queue = new RandomizedQueue<>(3);
+        RandomizedQueue<String> queue = new RandomizedQueue<>();
         queue.enqueue("a");
         queue.enqueue("b");
         queue.enqueue("c");
@@ -178,7 +177,7 @@ public class RandomizedQueueTestCase {
 
     @Test
     void iteratorShouldThrowAnExceptionWhenNoMoreItems() {
-        RandomizedQueue<String> queue = new RandomizedQueue<>(2);
+        RandomizedQueue<String> queue = new RandomizedQueue<>();
 
         assertThrows(NoSuchElementException.class, ()-> {
             Iterator<String> queueIterator = queue.iterator();

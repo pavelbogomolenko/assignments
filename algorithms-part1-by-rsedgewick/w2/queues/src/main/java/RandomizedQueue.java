@@ -10,12 +10,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private int head = -1;
     private int tail = -1;
-    private int capacity;
+    private int capacity = 2;
     private Item[] q;
     private int n = 0;
 
-    public RandomizedQueue(int cap) {
-        capacity = cap;
+    public RandomizedQueue() {
         q = (Item[])new Object[capacity];
     }
 
@@ -138,7 +137,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        RandomizedQueue<Integer> queue = new RandomizedQueue<>(10);
+        RandomizedQueue<Integer> queue = new RandomizedQueue<>();
 
         queue.enqueue(10);
         queue.enqueue(20);

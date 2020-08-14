@@ -1,44 +1,139 @@
 package main.java;
 
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
+    private int head = -1;
+    private int tail = -1;
+    private int capacity;
+    private Item[] q;
     private int n = 0;
 
-    // construct an empty randomized queue
-    public RandomizedQueue() {
-
+    public RandomizedQueue(int cap) {
+        capacity = cap;
+        q = (Item[])new Object[capacity];
     }
 
-    // is the randomized queue empty?
+    public void enqueue(Item item) {
+        if(item == null) {
+            throw new IllegalArgumentException("item must not be null");
+        }
+        if(tail == capacity - 1) {
+            resize(capacity * 2);
+        }
+        q[++tail] = item;
+        if(tail == 0) {
+            head = tail;
+        }
+        n++;
+    }
+
+    public Item dequeue() {
+        if(head == -1) {
+            throw new IndexOutOfBoundsException("queue is empty");
+        }
+        int randomIndex = StdRandom.uniform(head, tail + 1);
+        Item randomItem = q[randomIndex];
+        while (randomItem == null) {
+            randomIndex = StdRandom.uniform(head, tail + 1);
+            randomItem = q[randomIndex];
+        }
+        Item item = q[randomIndex];
+        if(randomIndex == head) {
+            Item headItem = null;
+            while(headItem == null && head <= tail) {
+                headItem = q[++head];
+            }
+        }
+        if(randomIndex == tail) {
+            Item tailItem = null;
+            while(tailItem == null && tail >= head) {
+                tailItem = q[--tail];
+            }
+        }
+        q[randomIndex] = null;
+        n--;
+        if(n == q.length / 4) {
+            resize(q.length / 2);
+        }
+
+        return item;
+    }
+
+    public Item sample() {
+        if(isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Item item = null;
+        while(item == null) {
+            item = q[StdRandom.uniform(head, tail + 1)];
+        }
+        return item;
+    }
+
     public boolean isEmpty() {
-        return true;
+        return n == 0;
     }
 
-    // return the number of items on the randomized queue
     public int size() {
         return n;
     }
 
-    // add the item
-    public void enqueue(Item item) {
-
+    private void resize(int newCapacity) {
+        Item[] qCopy = (Item[])new Object[newCapacity];
+        int qCopyHead = 0;
+        for(int i = head; i <= tail; i++) {
+            Item itemToCopy = q[i];
+            if(itemToCopy != null) {
+                qCopy[qCopyHead++] = itemToCopy;
+            }
+        }
+        head = 0;
+        tail = qCopyHead - 1;
+        q = qCopy;
+        capacity = newCapacity;
     }
 
-    // remove and return a random item
-    public Item dequeue() {
-        return null;
-    }
-
-    // return a random item (but do not remove it)
-    public Item sample() {
-        return null;
-    }
-
-    // return an independent iterator over items in random order
+    @Override
     public Iterator<Item> iterator() {
-        return null;
+        return new RandomizedQueueIterator();
+    }
+
+    private class RandomizedQueueIterator<Item> implements Iterator<Item> {
+        private int current = 0;
+        private Item[] randomQ = (Item[])new Object[n];
+
+        public RandomizedQueueIterator() {
+            if(isEmpty()) {
+                return;
+            }
+            int randomQCount = 0;
+            for(int i = head; i <= tail; i++) {
+                Item itemToCopy = (Item)q[i];
+                if(itemToCopy != null) {
+                    randomQ[randomQCount++] = itemToCopy;
+                }
+            }
+            StdRandom.shuffle(randomQ);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current < randomQ.length;
+        }
+
+        @Override
+        public Item next() {
+            if(!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return randomQ[current++];
+        }
     }
 
     // unit testing (required)

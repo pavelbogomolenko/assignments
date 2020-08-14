@@ -1,8 +1,8 @@
 package main.java;
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -104,9 +104,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomizedQueueIterator();
     }
 
-    private class RandomizedQueueIterator<Item> implements Iterator<Item> {
+    private class RandomizedQueueIterator implements Iterator<Item> {
         private int current = 0;
-        private Item[] randomQ = (Item[])new Object[n];
+        private final Item[] randomQ = (Item[])new Object[n];
 
         public RandomizedQueueIterator() {
             if(isEmpty()) {
@@ -114,7 +114,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             }
             int randomQCount = 0;
             for(int i = head; i <= tail; i++) {
-                Item itemToCopy = (Item)q[i];
+                Item itemToCopy = q[i];
                 if(itemToCopy != null) {
                     randomQ[randomQCount++] = itemToCopy;
                 }
@@ -138,6 +138,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+        RandomizedQueue<Integer> queue = new RandomizedQueue<>(10);
 
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        StdOut.println(queue.size());
+        StdOut.println(queue.dequeue());
+        StdOut.println(queue.dequeue());
+        StdOut.println(queue.size());
+        StdOut.println(queue.dequeue());
+        StdOut.println(queue.isEmpty());
     }
 }

@@ -34,7 +34,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     public Item dequeue() {
         if(head == -1) {
-            throw new IndexOutOfBoundsException("queue is empty");
+            throw new NoSuchElementException("queue is empty");
         }
         int randomIndex = StdRandom.uniform(head, tail + 1);
         Item randomItem = q[randomIndex];

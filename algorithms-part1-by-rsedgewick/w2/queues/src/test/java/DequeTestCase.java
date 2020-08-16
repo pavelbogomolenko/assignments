@@ -134,4 +134,61 @@ public class DequeTestCase {
             queueIterator.remove();
         });
     }
+
+    @Test
+    void shouldDepleteDequeFromBackInCorrectOrder() {
+        Deque<Integer> deque = new Deque<>();
+
+        deque.addLast(30);
+        deque.addFirst(20);
+        deque.addLast(40);
+        deque.addFirst(10);
+
+        assertEquals(40, deque.removeLast());
+        assertEquals(30, deque.removeLast());
+        assertEquals(20, deque.removeLast());
+        assertEquals(10, deque.removeLast());
+
+        assertEquals(0, deque.size());
+    }
+
+    @Test
+    void shouldDepleteDequeInCorrectOrder() {
+        Deque<Integer> deque = new Deque<>();
+
+        deque.addLast(30);
+        deque.addFirst(20);
+        deque.addLast(40);
+        deque.addFirst(10);
+
+        assertEquals(40, deque.removeLast());
+        assertEquals(10, deque.removeFirst());
+        assertEquals(30, deque.removeLast());
+        assertEquals(20, deque.removeFirst());
+
+        assertEquals(0, deque.size());
+    }
+
+    @Test
+    void shouldDepleteDequeInCorrectOrderAndAddNewItem() {
+        Deque<Integer> deque = new Deque<>();
+
+        deque.addLast(30);
+        deque.addFirst(20);
+        deque.addLast(40);
+        deque.addFirst(10);
+
+        assertEquals(40, deque.removeLast());
+        assertEquals(10, deque.removeFirst());
+        assertEquals(30, deque.removeLast());
+        assertEquals(20, deque.removeFirst());
+
+        deque.addFirst(70);
+        deque.addLast(80);
+        deque.addFirst(90);
+
+        assertEquals(90, deque.removeFirst());
+
+        assertEquals(2, deque.size());
+    }
 }

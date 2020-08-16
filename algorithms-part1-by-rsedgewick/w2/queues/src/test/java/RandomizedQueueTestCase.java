@@ -187,4 +187,58 @@ public class RandomizedQueueTestCase {
             queueIterator.next();
         });
     }
+
+    @Test
+    void testCourseraSequence() {
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+        rq.enqueue(422);
+        assertEquals(422, rq.dequeue());
+    }
+
+    @Test
+    void testRandomizedQueuesOfDifferentType() {
+        RandomizedQueue<Integer> intRq = new RandomizedQueue<Integer>();
+        RandomizedQueue<String> stringRq = new RandomizedQueue<String>();
+    }
+
+    @Test
+    void testCourseraSequenceOfOps1() {
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+        rq.enqueue(45);
+        assertEquals(45, rq.dequeue());
+        rq.enqueue(43);
+        assertEquals(43, rq.dequeue());
+        rq.enqueue(48);
+        assertEquals(48, rq.dequeue());
+        assertEquals(0, rq.size());
+        rq.enqueue(23);
+        assertEquals(23, rq.dequeue());
+        rq.enqueue(55);
+        assertEquals(1, rq.size());
+        assertEquals(55, rq.dequeue());
+    }
+
+    @Test
+    void testCourseraSequenceOfOps2() {
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+        rq.enqueue(45);
+        assertEquals(45, rq.dequeue());
+        rq.enqueue(48);
+        rq.enqueue(43);;
+        rq.enqueue(44);;
+        System.out.println("dequeue: " + rq.dequeue());
+        System.out.println("sample: " + rq.sample());
+        rq.enqueue(45);;
+        rq.enqueue(46);;
+        rq.enqueue(47);;
+        System.out.println("dequeue: " + rq.dequeue());
+        System.out.println("dequeue: " + rq.dequeue());
+        System.out.println("dequeue: " + rq.dequeue());
+
+        for (int i: rq) {
+            System.out.println("for:" + i);
+        }
+        System.out.println("sample: " + rq.sample());
+        assertEquals(2, rq.size());
+    }
 }

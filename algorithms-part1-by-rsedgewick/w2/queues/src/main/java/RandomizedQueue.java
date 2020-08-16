@@ -28,10 +28,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new IllegalArgumentException("item must not be null");
         }
         if(tail == capacity - 1) {
-            resize(capacity * 2);
+            resize(capacity <= 0 ? 2 : capacity * 2);
         }
         if(tail++ > 0) {
-            int randomIndex = StdRandom.uniform(tail);
+            int randomIndex = StdRandom.uniform(head, tail + 1);
             Item randomItem = q[randomIndex];
             q[tail] = randomItem;
             q[randomIndex] = item;
@@ -48,7 +48,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(head == -1) {
             throw new NoSuchElementException("queue is empty");
         }
-        Item itemToRemove = q[++head];
+        Item itemToRemove = q[head++];
         n--;
         if(n == q.length / 4) {
             resize(q.length / 2);

@@ -2,6 +2,7 @@ import main.java.Deque;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -190,5 +191,56 @@ public class DequeTestCase {
         assertEquals(90, deque.removeFirst());
 
         assertEquals(2, deque.size());
+    }
+
+    @Test
+    void testFromCourseraSequenceOfOps() {
+        Deque<Integer> deque = new Deque<Integer>();
+        deque.addFirst(1);
+        assertEquals(1, deque.removeLast());
+        deque.addFirst(3);
+        assertFalse(deque.isEmpty());
+        assertEquals(3, deque.removeLast());
+    }
+
+    @Test
+    void testFromCourseraSequenceOfOps2() {
+        Deque<Integer> deque = new Deque<Integer>();
+        deque.addLast(1);
+        assertEquals(1, deque.removeFirst());
+        deque.addLast(3);
+        deque.addLast(4);
+        deque.addLast(5);
+        assertEquals(3, deque.removeFirst());
+    }
+
+    @Test
+    void testFromCourseraSequenceOfOps3() {
+        Deque<Integer> deque= new Deque<Integer>();
+        deque.addLast(1);
+        deque.addFirst(2);
+        deque.addFirst(3);
+        deque.addFirst(4);
+        deque.addLast(5);
+        assertEquals(4, deque.removeFirst());
+        assertEquals(5, deque.removeLast());
+    }
+
+    @Test
+    void testFromCourseraSequenceOps4() {
+        Deque<Integer> deque = new Deque<Integer>();
+        deque.addFirst(1);
+        deque.addLast(2);
+        deque.addLast(3);
+        deque.addFirst(4);
+        deque.addFirst(5);
+        deque.addLast(6);
+        int lastItem = deque.removeLast();
+
+        ArrayList<Integer> actualArray = new ArrayList<>();
+        for(int i: deque) {
+            actualArray.add(i);
+        }
+        assertFalse(actualArray.contains(lastItem));
     }
 }

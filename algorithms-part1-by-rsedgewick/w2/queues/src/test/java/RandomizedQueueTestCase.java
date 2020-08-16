@@ -168,8 +168,11 @@ public class RandomizedQueueTestCase {
         queue.enqueue("a");
         queue.enqueue("b");
         queue.enqueue("c");
+        queue.enqueue("d");
+        queue.enqueue("e");
+        queue.enqueue("f");
 
-        ArrayList<String> expectedArray = new ArrayList<>(Arrays.asList("b", "a", "c"));
+        ArrayList<String> expectedArray = new ArrayList<>(Arrays.asList("b", "a", "c", "d", "e", "f"));
         for (String s: queue) {
             assertTrue(expectedArray.contains(s));
         }

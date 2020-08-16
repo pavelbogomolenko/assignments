@@ -18,6 +18,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         q = (Item[])new Object[capacity];
     }
 
+    /**
+     * Randomly insert new item, so we dont need to shuffle later
+     *
+     * @param item
+     */
     public void enqueue(Item item) {
         if(item == null) {
             throw new IllegalArgumentException("item must not be null");
@@ -25,7 +30,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(tail == capacity - 1) {
             resize(capacity * 2);
         }
-        q[++tail] = item;
+        if(tail++ > 0) {
+            int randomIndex = StdRandom.uniform(tail);
+            Item randomItem = q[randomIndex];
+            q[tail] = randomItem;
+            q[randomIndex] = item;
+        } else {
+            q[tail] = item;
+        }
         if(tail == 0) {
             head = tail;
         }
@@ -36,43 +48,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(head == -1) {
             throw new NoSuchElementException("queue is empty");
         }
-        int randomIndex = StdRandom.uniform(head, tail + 1);
-        Item randomItem = q[randomIndex];
-        while (randomItem == null) {
-            randomIndex = StdRandom.uniform(head, tail + 1);
-            randomItem = q[randomIndex];
-        }
-        Item item = q[randomIndex];
-        if(randomIndex == head) {
-            Item headItem = null;
-            while(headItem == null && head <= tail) {
-                headItem = q[++head];
-            }
-        }
-        if(randomIndex == tail) {
-            Item tailItem = null;
-            while(tailItem == null && tail >= head) {
-                tailItem = q[--tail];
-            }
-        }
-        q[randomIndex] = null;
+        Item itemToRemove = q[++head];
         n--;
         if(n == q.length / 4) {
             resize(q.length / 2);
         }
 
-        return item;
+        return itemToRemove;
     }
 
     public Item sample() {
         if(isEmpty()) {
             throw new NoSuchElementException();
         }
-        Item item = null;
-        while(item == null) {
-            item = q[StdRandom.uniform(head, tail + 1)];
-        }
-        return item;
+        return q[StdRandom.uniform(head, tail + 1)];
     }
 
     public boolean isEmpty() {
@@ -88,9 +77,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         int qCopyHead = 0;
         for(int i = head; i <= tail; i++) {
             Item itemToCopy = q[i];
-            if(itemToCopy != null) {
-                qCopy[qCopyHead++] = itemToCopy;
-            }
+            qCopy[qCopyHead++] = itemToCopy;
         }
         head = 0;
         tail = qCopyHead - 1;
@@ -104,26 +91,23 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private int current = 0;
-        private final Item[] randomQ = (Item[])new Object[n];
+        private int current = head;
 
         public RandomizedQueueIterator() {
             if(isEmpty()) {
                 return;
             }
-            int randomQCount = 0;
             for(int i = head; i <= tail; i++) {
-                Item itemToCopy = q[i];
-                if(itemToCopy != null) {
-                    randomQ[randomQCount++] = itemToCopy;
-                }
+                int r = StdRandom.uniform(i, tail + 1);
+                Item randomItem = q[r];
+                q[r] = q[i];
+                q[i] = randomItem;
             }
-            StdRandom.shuffle(randomQ);
         }
 
         @Override
         public boolean hasNext() {
-            return current < randomQ.length;
+            return current > - 1 && current <= tail;
         }
 
         @Override
@@ -131,7 +115,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             if(!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return randomQ[current++];
+            return q[current++];
         }
     }
 

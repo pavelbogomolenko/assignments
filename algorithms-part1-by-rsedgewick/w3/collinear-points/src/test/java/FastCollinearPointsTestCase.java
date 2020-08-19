@@ -31,14 +31,6 @@ public class FastCollinearPointsTestCase {
     }
 
     @Test
-    void constructorShouldThrowIfArgLengthIsLessFour() {
-        assertThrows(IllegalArgumentException.class, ()-> {
-            Point[] threePoints = new Point[] { new Point(1, 2), new Point(0,0), new Point(4,5)};
-            new FastCollinearPoints(threePoints);
-        });
-    }
-
-    @Test
     void given11CollinearPointsShouldReturn2Segment() {
         Point[] points = new Point[]{
                 new Point(2, 2),

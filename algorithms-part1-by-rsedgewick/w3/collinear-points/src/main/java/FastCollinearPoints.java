@@ -3,17 +3,33 @@ package main.java;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
-    Point[] p;
-    LineSegment[] lineSegments;
+    private Point[] p;
+    private LineSegment[] lineSegments;
 
     public FastCollinearPoints(Point[] points) {
-        CollinearPointsInputValidator.validateInput(points);
+        if(points == null) {
+            throw new IllegalArgumentException();
+        }
+
+        for (Point point : points) {
+            if(point == null) {
+                throw new IllegalArgumentException("points should not contain null values");
+            }
+        }
+
+        for(int i = 0; i < points.length; i++) {
+            for (int j = i + 1;  j < points.length; j++) {
+                if(points[i].compareTo(points[j]) == 0) {
+                    throw new IllegalArgumentException("points should not contain duplicates");
+                }
+            }
+        }
         p = points;
     }
 
     public LineSegment[] segments() {
         int n = p.length;
-        Point[] pSortedPoints = new Point[n];
+        Point[] pSortedPoints = new Point[n - 1];
         Point pPoint = null;
         int sortedPointsCounter = 0;
         LineSegment[] tempLineSegment = new LineSegment[n];
@@ -27,11 +43,8 @@ public class FastCollinearPoints {
                         double prevSlope = 999;
                         Point[] tmpCollinearPoints = new Point[n];
                         int tmpCollinearPointsCount = 0;
-                        for(int sp = 0; sp < n; sp++) {
+                        for(int sp = 0; sp < n - i; sp++) {
                             Point currentSortedPoint = pSortedPoints[sp];
-                            if(currentSortedPoint == null) {
-                                continue;
-                            }
                             double pSlope = pPoint.slopeTo(currentSortedPoint);
                             if(pSlope != prevSlope) {
                                 if(tmpCollinearPointsCount >= 3) {
@@ -58,7 +71,7 @@ public class FastCollinearPoints {
                             } else {
                                 tmpCollinearPoints[tmpCollinearPointsCount++] = currentSortedPoint;
 
-                                if(sp == n - 1) {
+                                if(sp == n - i - 1) {
                                     if(tmpCollinearPointsCount >= 3) {
                                         Point[] tmpCollinearPoints2 = new Point[tmpCollinearPointsCount + 1];
                                         int tmpCollinearPoints2Counter = 0;
@@ -81,7 +94,7 @@ public class FastCollinearPoints {
                         }
                     }
                     sortedPointsCounter = 0;
-                    pSortedPoints = new Point[n];
+                    pSortedPoints = new Point[n - i - 1];
                     pSortedPoints[sortedPointsCounter++] = p[j];
                     pPoint = p[i];
                 } else {

@@ -44,7 +44,7 @@ public class PointTestCase {
     @CsvSource({
             //x0, y0, x1, y1
             "2, 2, 2, 7",
-            "-3, -1, -3, -6"
+            "-3, -1, -3, -6",
     })
     void slopeToReturnsPosInfIfThereIsHorizontalLineBetweenInvokingPointAndArgumentPoint(int x0, int y0, int x1, int y1) {
         Point invokingPoint = new Point(x0, y0);
@@ -54,15 +54,15 @@ public class PointTestCase {
 
     @ParameterizedTest
     @CsvSource({
-            //x0, y0, x1, y1
+//            x0, y0, x1, y1
             "1, 2, 3, 4",
             "12, 2, 5, 6",
-            "5, 4, 2, 7"
+            "5, 4, 2, 7",
     })
     void slopeToReturnsDoubleIfThereIsSlopeBetweenInvokingPointAndArgumentPoint(int x0, int y0, int x1, int y1) {
         Point invokingPoint = new Point(x0, y0);
         Point argumentPoint = new Point(x1, y1);
-        assertTrue(invokingPoint.slopeTo(argumentPoint) == (double) (y1 - y0) / (x1 - x0));
+        assertTrue(invokingPoint.slopeTo(argumentPoint) == (y1 - y0) / (double) (x1 - x0));
     }
 
     @Test

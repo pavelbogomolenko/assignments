@@ -3,19 +3,35 @@ package main.java;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    Point[] p;
-    LineSegment[] lineSegments;
+    private Point[] p;
+    private LineSegment[] lineSegments;
 
     // finds all line segments containing 4 points
     // For simplicity, we will not supply any input to BruteCollinearPoints that has 5 or more collinear points.
     public BruteCollinearPoints(Point[] points) {
-        CollinearPointsInputValidator.validateInput(points);
+        if(points == null) {
+            throw new IllegalArgumentException();
+        }
+
+        for (Point point : points) {
+            if(point == null) {
+                throw new IllegalArgumentException("points should not contain null values");
+            }
+        }
+
+        for(int i = 0; i < points.length; i++) {
+            for (int j = i + 1;  j < points.length; j++) {
+                if(points[i].compareTo(points[j]) == 0) {
+                    throw new IllegalArgumentException("points should not contain duplicates");
+                }
+            }
+        }
         p = points;
     }
 
     public LineSegment[] segments() {
         int n = p.length;
-        LineSegment[] tempLineSegment = new LineSegment[n / 4];
+        LineSegment[] tempLineSegment = new LineSegment[n];
         int lineSegmentsCount = 0;
         for(int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {

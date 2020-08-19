@@ -30,14 +30,6 @@ public class BruteCollinearPointsTestCase {
     }
 
     @Test
-    void constructorShouldThrowIfArgLengthIsLessFour() {
-        assertThrows(IllegalArgumentException.class, ()-> {
-            Point[] threePoints = new Point[] { new Point(1, 2), new Point(0,0), new Point(4,5)};
-            new BruteCollinearPoints(threePoints);
-        });
-    }
-
-    @Test
     void givenFourCollinearPointsShouldReturnOneSegment() {
         Point[] points = new Point[] {
                 new Point(2,2),
@@ -50,6 +42,20 @@ public class BruteCollinearPointsTestCase {
 
         LineSegment[] segments = collinearPoints.segments();
         assertEquals("(2, 2) -> (5, 5)", segments[0].toString());
+    }
+
+    @Test
+    void givenThreeCollinearPointsShouldReturnOneSegment() {
+        Point[] points = new Point[] {
+                new Point(2,2),
+                new Point(3, 3),
+                new Point(4,4)
+        };
+
+        BruteCollinearPoints collinearPoints = new BruteCollinearPoints(points);
+
+        LineSegment[] segments = collinearPoints.segments();
+        assertEquals(0, collinearPoints.numberOfSegments());
     }
 
     @Test

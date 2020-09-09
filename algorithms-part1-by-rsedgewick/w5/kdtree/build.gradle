@@ -35,6 +35,9 @@ test {
 
 application {
 //    mainClass = 'main.java.RangeSearchVisualizer'
-    mainClass = 'main.java.NearestNeighborVisualizer'
+    //mainClass = 'main.java.NearestNeighborVisualizer'
+// /   mainClass = 'main.java.KdTree'
+//    mainClass = 'main.java.KdTreeEx'
+    mainClass = 'main.java.KdTreeVisualizer'
 }
 

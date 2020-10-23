@@ -1,12 +1,14 @@
 package main.java;
 
+import edu.princeton.cs.algs4.IndexMinPQ;
 import edu.princeton.cs.algs4.Picture;
-import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.Stack;
+
 import java.awt.Color;
 
 public class SeamCarver {
     private final Picture origPicture;
-    private double[][] energyArray;
+    private double[] energyArray;
     private Color[][] pictureColorArray;
     private static final double BORDER_ENERGY = 1000.0;
     private boolean needTranspose = false;
@@ -49,7 +51,7 @@ public class SeamCarver {
 
     // energy of pixel at column x and row y
     public double energy(int x, int y) {
-        if (x < 0 || x >= width() || y < 0 || y >= height()) {
+        if(x < 0 || x >= width() || y < 0 || y >= height()) {
             throw new IllegalArgumentException();
         }
         if(x == 0 || y == 0 || x == width() - 1 || y == height() - 1) {
@@ -83,73 +85,72 @@ public class SeamCarver {
             n = height();
             m = width();
         }
-        energyArray = new double[n][m];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                energyArray[i][j] = needTranspose ? energy(j, i) : energy(i, j);
-            }
+        energyArray = new double[n * m];
+        for (int i = 0; i < n  * m; i++) {
+            int x = getXCoord(i, n);
+            int y = getYCoord(i, n);
+            energyArray[i] = needTranspose ? energy(y, x) : energy(x, y);
         }
 
-        Queue<EnergyPoint>[] energyPointQueues = (Queue<EnergyPoint>[]) new Queue[n];
-        for(int i = 0; i < n; i++) {
-            energyPointQueues[i] = new Queue<>();
+        int[] pathTo = new int[n * m];
+        double[] distTo = new double[n * m];
+        IndexMinPQ<Double> pq = new IndexMinPQ<>(n * m);
+
+        for(int i = 0; i < n * m; i++) {
+            distTo[i] = Double.POSITIVE_INFINITY;
         }
 
         for (int i = 0; i < n; i++) {
-            Queue<EnergyPoint> queue = new Queue<>();
-            EnergyPoint energyPoint = new EnergyPoint(i, 0, BORDER_ENERGY);
-            queue.enqueue(energyPoint);
-            while (!queue.isEmpty()) {
-                energyPoint = queue.dequeue();
-                energyPointQueues[i].enqueue(energyPoint);
-                enqueueMinDownwardNeighbor(energyPoint, queue);
+            distTo[i] = BORDER_ENERGY;
+            pq.insert(i, BORDER_ENERGY);
+            while (!pq.isEmpty()) {
+                int point = pq.delMin();
+                enqueueMinDownwardNeighbor(point, pathTo, distTo, pq);
             }
         }
 
         double minEnergy = Double.MAX_VALUE;
-        int[] minVerticalSeam = new int[m];
-        for(Queue<EnergyPoint> eps: energyPointQueues) {
-            double epsEnergy = 0.0;
-            int[] verticalSeam = new int[m];
-            int i = 0;
-            for(EnergyPoint eP: eps) {
-                epsEnergy += eP.getWeight();
-                verticalSeam[i++] = eP.getX();
-            }
-            if(epsEnergy < minEnergy) {
-                minEnergy = epsEnergy;
-                minVerticalSeam = verticalSeam;
+        int minIndex = 0;
+        for(int i = (n * m) - n; i < n * m; i++) {
+            if(distTo[i] < minEnergy) {
+                minEnergy = distTo[i];
+                minIndex = i;
             }
         }
 
+        Stack<Integer> path = new Stack<>();
+        path.push(getXCoord(minIndex, n));
+        for(int p = pathTo[minIndex]; p != 0; p = pathTo[p]) {
+            path.push(getXCoord(p, n));
+        }
+
+        int[] minVerticalSeam = new int[m];
+        int iter = 0;
+        for (int p: path) {
+            minVerticalSeam[iter++] = p;
+        }
         return minVerticalSeam;
     }
 
-    private void enqueueMinDownwardNeighbor(EnergyPoint point, Queue<EnergyPoint> queue) {
+    private void enqueueMinDownwardNeighbor(int point, int[] pathTo, double[] distTo, IndexMinPQ<Double> pq) {
         int xNeighborsOffset[] = {-1, 0, 1};
-        double minEnerge = BORDER_ENERGY + 1;
-        int xMin = -1;
-        int yMin = -1;
-        int n = width();
-        int m = height();
-        if(needTranspose) {
-            n = height();
-            m = width();
-        }
+        int n = needTranspose ? height() : width();
         for(int xCoord: xNeighborsOffset) {
-            int x = point.getX() + xCoord;
-            int y = point.getY() + 1;
-            if((x >= 0 && x < n) && (y >= 0 && y < m)) {
-                double currentEnergy = energyArray[x][y];
-                if(currentEnergy < minEnerge) {
-                    minEnerge = currentEnergy;
-                    xMin = x;
-                    yMin = y;
+            int nextPoint = point + n + xCoord;
+            if (point % n == 0 && xCoord < 0
+                    || point % n == n - 1 && xCoord > 0 || nextPoint >= height() * width()) {
+                continue;
+            }
+            double currentEnergy = distTo[point] + energyArray[nextPoint];
+            if(distTo[nextPoint] > currentEnergy) {
+                distTo[nextPoint] = currentEnergy;
+                pathTo[nextPoint] = point;
+                if(pq.contains(nextPoint)) {
+                    pq.decreaseKey(nextPoint, currentEnergy);
+                } else {
+                    pq.insert(nextPoint, currentEnergy);
                 }
             }
-        }
-        if(xMin != -1) {
-            queue.enqueue(new EnergyPoint(xMin, yMin, energyArray[xMin][yMin]));
         }
     }
 
@@ -202,11 +203,24 @@ public class SeamCarver {
         if (seam == null || seam.length != expectedLength) {
             throw new IllegalArgumentException();
         }
-        for (int i = 0; i < seam.length - 1; ++i) {
-            if (Math.abs(seam[i] - seam[i + 1]) > 1) {
-                throw new IllegalArgumentException();
-            }
-        }
+//        for (int i = 0; i < seam.length - 1; ++i) {
+//            if (Math.abs(seam[i] - seam[i + 1]) > 1) {
+//                throw new IllegalArgumentException();
+//            }
+//        }
+    }
+
+    private int getXCoord(int index, int n) {
+        return index % n;
+    }
+
+    private int getYCoord(int index, int n) {
+        return index / n;
+    }
+
+    private int toFlatCoordIndex(int x, int y) {
+        int n = needTranspose ? height() : width();
+        return (y * n) + x;
     }
 
     public static void main(String[] args) {
@@ -220,49 +234,5 @@ public class SeamCarver {
 
         sc.findVerticalSeam();
         sc.findHorizontalSeam();
-    }
-
-    private class EnergyPoint implements Comparable<EnergyPoint> {
-        private final int x;
-        private final int y;
-        private final double weight;
-
-        public EnergyPoint(int x, int y, double weight) {
-            this.x = x;
-            this.y = y;
-            this.weight = weight;
-        }
-
-        @Override
-        public int compareTo(EnergyPoint that) {
-            if(this.weight < that.weight) {
-                return -1;
-            } else if(that.weight > that.weight) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public double getWeight() {
-            return weight;
-        }
-
-        @Override
-        public String toString() {
-            return "EnergyPoint{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    ", weight=" + weight +
-                    '}';
-        }
     }
 }

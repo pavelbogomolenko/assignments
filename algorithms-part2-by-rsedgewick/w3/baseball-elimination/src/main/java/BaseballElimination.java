@@ -65,6 +65,18 @@ public class BaseballElimination {
 
         isEliminatedCalled = true;
 
+        //trivial case w[x] + r[x] < w[i]
+        boolean triviallyEliminated = false;
+        for(int i = 0; i < teamWins.length; i++) {
+            if(i != teamIdToEliminate && teamWins[teamIdToEliminate] + teamGamesLeftTotal[teamIdToEliminate] < teamWins[i]) {
+                triviallyEliminated = true;
+                teamsInCut.add(teamNames[i]);
+            }
+        }
+        if(triviallyEliminated) {
+            return true;
+        }
+
         int numOfGameVertices = (int) (factorial(teamNum - 1) / (factorial(teamNum - 3) * factorial(2)));
         int fnVerticesNum = numOfGameVertices + 2 + teamNum;
         FlowNetwork fn = new FlowNetwork(fnVerticesNum);

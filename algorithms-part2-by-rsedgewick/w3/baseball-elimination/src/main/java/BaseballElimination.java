@@ -18,7 +18,7 @@ public class BaseballElimination {
     private final int[] teamGamesLeftTotal;
     private final int[][] gamesLeftToPlay;
     private final int teamNum;
-    private final List<String> teamsInCut = new ArrayList<>();
+    private List<String> teamsInCut;
     private boolean isEliminatedCalled = false;
 
     public BaseballElimination(String filename) {
@@ -126,6 +126,7 @@ public class BaseballElimination {
 
         FordFulkerson ff = new FordFulkerson(fn, 0, fnVerticesNum - 1);
         int teamsInCutCount = 0;
+        teamsInCut = new ArrayList<>();
         for(int v = 0; v < fn.V(); v++) {
             if (ff.inCut(v) && checkTeam(v - (numOfGameVertices + 1))) {
                 teamsInCutCount += 1;

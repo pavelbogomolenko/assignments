@@ -6,22 +6,17 @@ import java.util.Arrays;
 
 public class CircularSuffixArray {
     private final int len;
-    private final String origString;
+    private final String s;
     private final SuffixArray[] suffixes;
 
     // circular suffix array of s
     public CircularSuffixArray(String s) {
         len = s.length();
-        origString = s;
-        char[] origStringChars = new char[len];
+        this.s = s;
+
         suffixes = new SuffixArray[len];
-
-        for (int i = 0; i < len; i++) {
-            origStringChars[i] = origString.charAt(i);
-        }
-
         for(int i = 0; i < len; i++) {
-            suffixes[i] = new SuffixArray(i, origStringChars);
+            suffixes[i] = new SuffixArray(i);
         }
         Arrays.sort(suffixes);
     }
@@ -31,19 +26,22 @@ public class CircularSuffixArray {
         return suffixes[i].getIndex();
     }
 
+    // length of s
+    public int length() {
+        return len;
+    }
+
     private class SuffixArray implements Comparable<SuffixArray> {
         private int beginIndex;
-        private final char[] suffix;
 
-        public SuffixArray(int index, char[] value) {
+        public SuffixArray(int index) {
             this.beginIndex = index;
-            suffix = value;
         }
 
         @Override
         public int compareTo(SuffixArray that) {
-            int thisLen = this.suffix.length - this.beginIndex;
-            int thatLen = that.suffix.length - that.beginIndex;
+            int thisLen = len - this.beginIndex;
+            int thatLen = len - that.beginIndex;
             int lim = Math.min(thisLen, thatLen);
             for (int i = 0; i < lim; i++) {
                 char c1 = this.getChar(i);
@@ -56,7 +54,7 @@ public class CircularSuffixArray {
         }
 
         public char getChar(int index) {
-            return suffix[beginIndex + index];
+            return s.charAt(beginIndex + index);
         }
 
         public int getIndex() {
@@ -67,7 +65,7 @@ public class CircularSuffixArray {
         public String toString() {
             return "SuffixArray{" +
                     "beginIndex=" + beginIndex +
-                    ", suffix=" + Arrays.toString(suffix) +
+                    ", suffix=" + s +
                     '}';
         }
     }

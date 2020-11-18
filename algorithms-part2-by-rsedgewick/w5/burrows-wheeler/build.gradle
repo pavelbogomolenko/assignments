@@ -33,5 +33,7 @@ test {
 }
 
 application {
-    mainClass = 'main.java.CircularSuffixArray'
+//    mainClass = 'main.java.CircularSuffixArray'
+//    mainClass = 'main.java.BurrowsWheeler'
+    mainClass = 'main.java.MoveToFront'
 }

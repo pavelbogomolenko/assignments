@@ -1,7 +1,7 @@
 package main.java;
 
 import edu.princeton.cs.algs4.BinaryStdIn;
-import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.BinaryStdOut;
 
 public class MoveToFront {
     // 256 extended ASCII characters
@@ -21,7 +21,7 @@ public class MoveToFront {
             Node prev = root;
             while (node != null) {
                 if(node.value == c) {
-                    StdOut.println(counter);
+                    BinaryStdOut.write(counter);
                     if(node == root) {
                         break;
                     }
@@ -35,6 +35,7 @@ public class MoveToFront {
                 counter++;
             }
         }
+        BinaryStdOut.close();
     }
 
     // apply move-to-front decoding, reading from standard input and writing to standard output
@@ -51,7 +52,7 @@ public class MoveToFront {
             Node prev = root;
             while (node != null) {
                 if(counter == c) {
-                    StdOut.println((byte) node.value);
+                    BinaryStdOut.write(node.value);
                     if(node == root) {
                         break;
                     }
@@ -65,6 +66,7 @@ public class MoveToFront {
                 counter++;
             }
         }
+        BinaryStdOut.close();
     }
 
     private static class Node {

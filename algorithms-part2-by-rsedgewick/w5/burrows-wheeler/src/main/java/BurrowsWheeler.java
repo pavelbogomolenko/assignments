@@ -2,8 +2,6 @@ package main.java;
 
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,44 +10,27 @@ public class BurrowsWheeler {
     // apply Burrows-Wheeler transform,
     // reading from standard input and writing to standard output
     public static void transform() {
-        StringBuilder origStringBuilder = new StringBuilder();
+        String s = BinaryStdIn.readString();
 
-        boolean nobin = true;
-        while (!BinaryStdIn.isEmpty()) {
-            origStringBuilder.append(BinaryStdIn.readChar());
-            nobin = false;
-        }
-
-        String s;
-        if(!nobin) {
-            s = origStringBuilder.toString();
-        } else {
-            In in = new In("abra.txt");
-            s = in.readAll();
-        }
         CircularSuffixArray csa = new CircularSuffixArray(s);
-        StringBuilder sortedSuffixBuilder = new StringBuilder();
-        int first = -1;
         for(int i = 0; i < csa.length(); i++) {
             int index = csa.index(i);
             if(index == 0) {
-                first = i;
-                sortedSuffixBuilder.append(s.charAt(csa.length() - 1));
+                BinaryStdOut.write(i);
+                BinaryStdOut.write(s.charAt(csa.length() - 1));
             } else {
-                sortedSuffixBuilder.append(s.charAt(index - 1));
+                BinaryStdOut.write(s.charAt(index - 1));
             }
         }
-        BinaryStdOut.write(first);
-        BinaryStdOut.write(sortedSuffixBuilder.toString());
         BinaryStdOut.close();
     }
 
     // apply Burrows-Wheeler inverse transform,
     // reading from standard input and writing to standard output
     public static void inverseTransform() {
-        char[] transformedChar = {'A', 'R', 'D', '!', 'R', 'C', 'A', 'A', 'A', 'A', 'B', 'B'};
+        int first = BinaryStdIn.readInt();
+        char[] transformedChar = BinaryStdIn.readString().toCharArray();
         int N = transformedChar.length;
-        int first = 3;
         int last = -1;
         char lastChar = '\0';
 
@@ -98,12 +79,11 @@ public class BurrowsWheeler {
             iter++;
         }
 
-        char[] reconstructedChar = new char[N];
-        for(int n = 3, i = 0; n != last; n = next[n], i++) {
-            reconstructedChar[i] = sortedTransformedChar[n];
+        for(int n = first, i = 0; n != last; n = next[n], i++) {
+            BinaryStdOut.write(sortedTransformedChar[n]);
         }
-        reconstructedChar[reconstructedChar.length - 1] = transformedChar[first];
-        StdOut.println(Arrays.toString(reconstructedChar));
+        BinaryStdOut.write(transformedChar[first]);
+        BinaryStdOut.close();
     }
 
     // if args[0] is "-", apply Burrows-Wheeler transform

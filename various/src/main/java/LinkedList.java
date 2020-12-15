@@ -45,25 +45,26 @@ public class LinkedList {
     }
 
     public boolean detectLoop(Node node) {
-        Node cur = node;
-        while (cur != null) {
-            Node p = cur;
-            cur = cur.next;
-            if(detectLoop(p, cur)) {
+        Node slow = node;
+        Node fast = node;
+        while (slow != null && fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean detectLoop(Node p, Node c) {
-        if(c == null) {
-            return false;
+    public Node findMid(Node node) {
+        Node slow = node;
+        Node fast = node;
+        while (slow != null && fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
-        if(p == c) {
-            return true;
-        }
-        return detectLoop(p, c.next);
+        return slow;
     }
 
     public void printLL() {
@@ -113,9 +114,13 @@ public class LinkedList {
         llPart.printLL(reversedNode);
 
 
-//        Node loopNode = llPart.initLinkedListWithLoop();
-        Node loopNode = llPart.initLinkedList();
+        Node loopNode = llPart.initLinkedListWithLoop();
+//        Node loopNode = llPart.initLinkedList();
         System.out.println("loop detection");
         System.out.println("loop detected: " + llPart.detectLoop(loopNode));
+
+        System.out.println("mid of the list:");
+        llPart.printLL(llPart.initLinkedList());
+        System.out.println(llPart.findMid(llPart.initLinkedList()).value);
     }
 }

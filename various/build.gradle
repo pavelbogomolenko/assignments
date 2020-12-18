@@ -34,7 +34,8 @@ test {
 
 application {
 //    mainClass = 'main.java.RotateIntMatrixClockwise'
-    mainClass = 'main.java.LinkedList'
+//    mainClass = 'main.java.LinkedList'
 //    mainClass = 'main.java.SetOfStacks'
+    mainClass = 'main.java.IntMinPQ'
 }
 

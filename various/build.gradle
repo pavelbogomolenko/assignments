@@ -36,6 +36,8 @@ application {
 //    mainClass = 'main.java.RotateIntMatrixClockwise'
 //    mainClass = 'main.java.LinkedList'
 //    mainClass = 'main.java.SetOfStacks'
-    mainClass = 'main.java.IntMinPQ'
+//    mainClass = 'main.java.IntMinPQ'
+//    mainClass = 'main.java.DiGraph'
+    mainClass = 'main.java.DiGraphPath'
 }
 

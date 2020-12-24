@@ -9,7 +9,7 @@ public class SetOfStacks<Item> {
         this.stackIndex = 0;
 
         stackArray = (Stack<Item>[]) new Stack[1];
-        stackArray[this.stackIndex] = new Stack();
+        stackArray[this.stackIndex] = new Stack<>();
     }
 
     public void push(Item item) {

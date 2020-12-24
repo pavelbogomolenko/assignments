@@ -38,6 +38,8 @@ application {
 //    mainClass = 'main.java.SetOfStacks'
 //    mainClass = 'main.java.IntMinPQ'
 //    mainClass = 'main.java.DiGraph'
-    mainClass = 'main.java.DiGraphPath'
+//    mainClass = 'main.java.DiGraphPath'
+//    mainClass = 'main.java.BinaryTreeAdjList'
+    mainClass = 'main.java.BinTreeAdjListTraversal'
 }
 
